@@ -8,7 +8,6 @@ import (
 	"github.com/apache/rocketmq-client-go/v2"
 	"github.com/apache/rocketmq-client-go/v2/primitive"
 	"github.com/apache/rocketmq-client-go/v2/producer"
-	"github.com/chihqiang/cdc-trigger/pkg/structx"
 	"github.com/chihqiang/cdc-trigger/types"
 )
 
@@ -36,15 +35,8 @@ type RocketMQOutput struct {
 	producer rocketmq.Producer
 }
 
-// NewRocketMQOutput Creates a RocketMQOutput and fills in default values
+// NewRocketMQOutput Creates a RocketMQOutput from the given configuration
 func NewRocketMQOutput(cfg RocketMQConfig) (*RocketMQOutput, error) {
-	var (
-		err error
-	)
-	cfg, err = structx.MergeWithDefaults[RocketMQConfig](cfg)
-	if err != nil {
-		return nil, err
-	}
 	// Create producer options
 	options := []producer.Option{
 		producer.WithNsResolver(primitive.NewPassthroughResolver(cfg.Servers)),

@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"time"
 
-	"github.com/chihqiang/cdc-trigger/pkg/structx"
 	"github.com/chihqiang/cdc-trigger/types"
 	"github.com/segmentio/kafka-go"
 )
@@ -36,13 +35,6 @@ type KafkaOutput struct {
 //
 //	*KafkaOutput instance
 func NewKafkaOutput(cfg KafkaConfig) (*KafkaOutput, error) {
-	var (
-		err error
-	)
-	cfg, err = structx.MergeWithDefaults[KafkaConfig](cfg)
-	if err != nil {
-		return nil, err
-	}
 	// Create Kafka writer
 	writer := &kafka.Writer{
 		// Kafka broker address list

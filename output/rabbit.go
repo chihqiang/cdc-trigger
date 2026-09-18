@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/chihqiang/cdc-trigger/pkg/structx"
 	"github.com/chihqiang/cdc-trigger/types"
 	"github.com/rabbitmq/amqp091-go"
 )
@@ -32,13 +31,6 @@ type RabbitMQOutput struct {
 
 // NewRabbitMQOutput Creates a RabbitMQOutput and tests the connection
 func NewRabbitMQOutput(cfg RabbitMQConfig) (*RabbitMQOutput, error) {
-	var (
-		err error
-	)
-	cfg, err = structx.MergeWithDefaults[RabbitMQConfig](cfg)
-	if err != nil {
-		return nil, err
-	}
 	// Establish RabbitMQ connection
 	conn, err := amqp091.Dial(cfg.URL)
 	if err != nil {

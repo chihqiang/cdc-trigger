@@ -5,7 +5,6 @@ import (
 	"fmt"
 
 	"github.com/chihqiang/cdc-trigger/pkg/redisx"
-	"github.com/chihqiang/cdc-trigger/pkg/structx"
 	"github.com/redis/go-redis/v9"
 )
 
@@ -23,12 +22,6 @@ type RedisStore struct {
 
 // NewRedisStore Creates a new RedisStore
 func NewRedisStore(cfg RedisConfig) (*RedisStore, error) {
-	var err error
-	// Merges the configuration with default values
-	cfg, err = structx.MergeWithDefaults[RedisConfig](cfg)
-	if err != nil {
-		return nil, err
-	}
 	// Initializes the Redis client
 	rdb, err := redisx.Open(redisx.Config{
 		Addr:     cfg.Addr,

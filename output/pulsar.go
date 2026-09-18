@@ -6,7 +6,6 @@ import (
 	"time"
 
 	"github.com/apache/pulsar-client-go/pulsar"
-	"github.com/chihqiang/cdc-trigger/pkg/structx"
 	"github.com/chihqiang/cdc-trigger/types"
 )
 
@@ -26,12 +25,6 @@ type PulsarOutput struct {
 
 // NewPulsarOutput initializes the Pulsar client and producer
 func NewPulsarOutput(cfg PulsarConfig) (*PulsarOutput, error) {
-	var err error
-	cfg, err = structx.MergeWithDefaults[PulsarConfig](cfg)
-	if err != nil {
-		return nil, err
-	}
-
 	o := &PulsarOutput{cfg: cfg}
 
 	clientOptions := pulsar.ClientOptions{

@@ -6,7 +6,6 @@ import (
 	"fmt"
 
 	"github.com/chihqiang/cdc-trigger/pkg/redisx"
-	"github.com/chihqiang/cdc-trigger/pkg/structx"
 	"github.com/chihqiang/cdc-trigger/types"
 	"github.com/redis/go-redis/v9"
 )
@@ -25,13 +24,8 @@ type RedisOutput struct {
 	key string
 }
 
-// NewRedisOutput Creates a RedisOutput and fills in default values
+// NewRedisOutput Creates a RedisOutput from the given configuration
 func NewRedisOutput(cfg RedisConfig) (*RedisOutput, error) {
-	var err error
-	cfg, err = structx.MergeWithDefaults[RedisConfig](cfg)
-	if err != nil {
-		return nil, err
-	}
 	// Initialize the Redis client
 	rdb, err := redisx.Open(redisx.Config{
 		Addr:     cfg.Addr,
