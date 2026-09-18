@@ -155,11 +155,13 @@ output:
   # RabbitMQ settings
   rabbitmq:
     url: "${OUTPUT_RABBITMQ_URL:-amqp://guest:guest@127.0.0.1:5672/}" # RabbitMQ connection URL
-    exchange: "${OUTPUT_RABBITMQ_EXCHANGE:-cdc-trigger-exchange}" # Exchange name
+    exchange: "${OUTPUT_RABBITMQ_EXCHANGE:-cdc-trigger-exchange}" # Exchange name (declared and bound on startup)
+    exchange_type: "${OUTPUT_RABBITMQ_EXCHANGE_TYPE:-direct}"     # Exchange type: direct / fanout / topic (headers is refused)
+    routing_key: "${OUTPUT_RABBITMQ_ROUTING_KEY:-cdc-trigger-events}" # Publish key, and the key the queue is bound with
     queue: "${OUTPUT_RABBITMQ_QUEUE:-cdc-trigger-events}"      # Queue name
-    durable: true              # Whether the queue should survive server restarts
+    durable: true              # Whether the queue should survive server restarts (also makes messages persistent)
     auto_delete: false         # Whether the queue should auto-delete when unused
-    auto_ack: false            # Whether to auto-acknowledge messages
+    auto_ack: false            # Whether to auto-acknowledge messages (unused when publishing)
     exclusive: false           # Whether the queue is exclusive to this connection
     no_wait: false             # Whether to wait for the server to confirm queue declaration
 
@@ -273,7 +275,8 @@ docker run -it --rm \
 The environment variables the bundled `config.yml` reads are `STORE_TYPE`, `STORE_FILE_DIR`,
 `STORE_REDIS_ADDR`, `STORE_REDIS_PASSWORD`, `STORE_REDIS_DB`, `SOURCE_TYPE`, `SOURCE_MYSQL_ADDR`,
 `SOURCE_MYSQL_USER`, `SOURCE_MYSQL_PASSWORD`, `OUTPUT_TYPE`, `OUTPUT_KAFKA_BROKERS`,
-`OUTPUT_KAFKA_TOPIC`, `OUTPUT_RABBITMQ_URL`, `OUTPUT_RABBITMQ_EXCHANGE`, `OUTPUT_RABBITMQ_QUEUE`,
+`OUTPUT_KAFKA_TOPIC`, `OUTPUT_RABBITMQ_URL`, `OUTPUT_RABBITMQ_EXCHANGE`, `OUTPUT_RABBITMQ_EXCHANGE_TYPE`,
+`OUTPUT_RABBITMQ_ROUTING_KEY`, `OUTPUT_RABBITMQ_QUEUE`,
 `OUTPUT_REDIS_ADDR`, `OUTPUT_REDIS_PASSWORD`, `OUTPUT_REDIS_DB`, `OUTPUT_REDIS_KEY`,
 `OUTPUT_ROCKETMQ_SERVERS`, `OUTPUT_ROCKETMQ_TOPIC`, `OUTPUT_ROCKETMQ_GROUP`,
 `OUTPUT_ROCKETMQ_NAMESPACE`, `OUTPUT_ROCKETMQ_ACCESS_KEY`, `OUTPUT_ROCKETMQ_SECRET_KEY`,
