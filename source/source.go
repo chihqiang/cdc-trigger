@@ -23,9 +23,8 @@ var (
 // Used to configure database connection information and storage settings
 type Config struct {
 	// Type The type of the data source, such as "mysql"
-	Type  SourceType   `yaml:"type" json:"type" mapstructure:"type" env:"SOURCE_TYPE,required"`
-	Mysql MysqlConfig  `yaml:"mysql" json:"mysql" mapstructure:"mysql"`
-	Store store.Config `yaml:"store" json:"store" mapstructure:"store"`
+	Type  SourceType  `json:"type,required"`
+	Mysql MysqlConfig `json:"mysql"`
 }
 
 // ISource Defines the data source interface

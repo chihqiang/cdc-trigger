@@ -6,16 +6,14 @@ require (
 	github.com/alicebob/miniredis/v2 v2.37.0
 	github.com/apache/pulsar-client-go v0.18.0
 	github.com/apache/rocketmq-client-go/v2 v2.1.2
-	github.com/caarlos0/env/v11 v11.4.0
 	github.com/chihqiang/cli v0.1.0
 	github.com/chihqiang/logx v0.1.0
+	github.com/chihqiang/readin v0.0.0-20260918035213-8ed12435ff02
 	github.com/go-mysql-org/go-mysql v1.14.0
-	github.com/joho/godotenv v1.5.1
 	github.com/rabbitmq/amqp091-go v1.10.0
 	github.com/redis/go-redis/v9 v9.18.0
 	github.com/segmentio/kafka-go v0.4.50
 	github.com/stretchr/testify v1.11.1
-	gopkg.in/yaml.v3 v3.0.1
 )
 
 require (
@@ -85,6 +83,7 @@ require (
 	google.golang.org/protobuf v1.36.5 // indirect
 	gopkg.in/inf.v0 v0.9.1 // indirect
 	gopkg.in/natefinch/lumberjack.v2 v2.2.1 // indirect
+	gopkg.in/yaml.v3 v3.0.1 // indirect
 	k8s.io/apimachinery v0.32.3 // indirect
 	k8s.io/client-go v0.32.3 // indirect
 	k8s.io/klog/v2 v2.130.1 // indirect

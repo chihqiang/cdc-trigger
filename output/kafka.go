@@ -13,10 +13,10 @@ import (
 // KafkaConfig Kafka configuration entity, used to initialize KafkaOutput
 type KafkaConfig struct {
 	// Brokers List of Kafka brokers, e.g., ["127.0.0.1:9092"]
-	Brokers []string `yaml:"brokers" json:"brokers" mapstructure:"brokers" env:"OUTPUT_KAFKA_BROKERS" envDefault:"127.0.0.1:9092"`
+	Brokers []string `json:"brokers,default=127.0.0.1:9092"`
 
 	// Topic The name of the Kafka topic to send messages to
-	Topic string `yaml:"topic" json:"topic" mapstructure:"topic" env:"OUTPUT_KAFKA_TOPIC" envDefault:"cdc-trigger-events"`
+	Topic string `json:"topic,default=cdc-trigger-events"`
 }
 
 // KafkaOutput Kafka implementation that satisfies the IOutput interface

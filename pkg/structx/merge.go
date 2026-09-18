@@ -3,14 +3,22 @@ package structx
 import (
 	"fmt"
 	"reflect"
+
+	"github.com/chihqiang/readin"
 )
 
 // MergeWithDefaults First, generate a struct with default values, then overwrite non-zero fields with values from the user.
 // Returns the merged struct.
+//
+// The defaults come from the `default=` option of the json tag, the very option
+// readin reads when it fills a configuration from a file, so a config built by
+// hand in code ends up with the values the config file would have given it.
+// A field tagged `required` has no default, so a struct carrying one cannot be
+// defaulted this way.
 func MergeWithDefaults[T any](v T) (T, error) {
 	var def T
 	// Generate a struct with default values
-	if err := SetEnvDefault(&def); err != nil {
+	if err := readin.New().FillDefault(&def); err != nil {
 		return def, err
 	}
 	// Overwrite the default values with the user's values

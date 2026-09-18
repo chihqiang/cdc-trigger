@@ -13,10 +13,10 @@ import (
 
 // RedisConfig Redis configuration entity
 type RedisConfig struct {
-	Addr     string `yaml:"addr" json:"addr" mapstructure:"addr" env:"OUTPUT_REDIS_ADDR" envDefault:"127.0.0.1:6379"`
-	Password string `yaml:"password" json:"password" mapstructure:"password" env:"OUTPUT_REDIS_PASSWORD" envDefault:""`
-	DB       int    `yaml:"db" json:"db" mapstructure:"db" env:"OUTPUT_REDIS_DB" envDefault:"0"`
-	Key      string `yaml:"key" json:"key" mapstructure:"key" env:"OUTPUT_REDIS_KEY" envDefault:"cdc-trigger-events"`
+	Addr     string `json:"addr,default=127.0.0.1:6379"`
+	Password string `json:"password"`
+	DB       int    `json:"db"`
+	Key      string `json:"key,default=cdc-trigger-events"`
 }
 
 type RedisOutput struct {

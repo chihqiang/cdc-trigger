@@ -13,14 +13,14 @@ import (
 
 // RabbitMQConfig RabbitMQ configuration entity
 type RabbitMQConfig struct {
-	URL        string `yaml:"url" json:"url" mapstructure:"url" env:"OUTPUT_RABBITMQ_URL" envDefault:"amqp://guest:guest@127.0.0.1:5672/"`
-	Exchange   string `yaml:"exchange" json:"exchange" mapstructure:"exchange" env:"OUTPUT_RABBITMQ_EXCHANGE" envDefault:"cdc-trigger-exchange"`
-	Queue      string `yaml:"queue" json:"queue" mapstructure:"queue" env:"OUTPUT_RABBITMQ_QUEUE" envDefault:"cdc-trigger-events"`
-	Durable    bool   `yaml:"durable" json:"durable" mapstructure:"durable" env:"OUTPUT_RABBITMQ_DURABLE" envDefault:"true"`
-	AutoDelete bool   `yaml:"auto_delete" json:"auto_delete" mapstructure:"auto_delete" env:"OUTPUT_RABBITMQ_AUTODELETE" envDefault:"false"`
-	AutoAck    bool   `yaml:"auto_ack" json:"auto_ack" mapstructure:"auto_ack" env:"OUTPUT_RABBITMQ_AUTOACK" envDefault:"false"`
-	Exclusive  bool   `yaml:"exclusive" json:"exclusive" mapstructure:"exclusive" env:"OUTPUT_RABBITMQ_EXCLUSIVE" envDefault:"false"`
-	NoWait     bool   `yaml:"no_wait" json:"no_wait" mapstructure:"no_wait" env:"OUTPUT_RABBITMQ_NOWAIT" envDefault:"false"`
+	URL        string `json:"url,default=amqp://guest:guest@127.0.0.1:5672/"`
+	Exchange   string `json:"exchange,default=cdc-trigger-exchange"`
+	Queue      string `json:"queue,default=cdc-trigger-events"`
+	Durable    bool   `json:"durable,default=true"`
+	AutoDelete bool   `json:"auto_delete"`
+	AutoAck    bool   `json:"auto_ack"`
+	Exclusive  bool   `json:"exclusive"`
+	NoWait     bool   `json:"no_wait"`
 }
 
 // RabbitMQOutput RabbitMQ output implementation

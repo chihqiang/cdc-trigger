@@ -10,9 +10,9 @@ import (
 )
 
 type RedisConfig struct {
-	Addr     string `yaml:"addr" json:"addr" mapstructure:"addr" env:"STORE_REDIS_ADDR" envDefault:"127.0.0.1:6379"`
-	Password string `yaml:"password" json:"password" mapstructure:"password" env:"STORE_REDIS_PASSWORD" envDefault:""`
-	DB       int    `yaml:"db" json:"db" mapstructure:"db" env:"STORE_REDIS_DB" envDefault:"0"`
+	Addr     string `json:"addr,default=127.0.0.1:6379"`
+	Password string `json:"password"`
+	DB       int    `json:"db"`
 }
 
 // RedisStore Redis store implementation
