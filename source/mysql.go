@@ -36,11 +36,11 @@ var (
 //  2. If IncludeTableRegex is not empty, only include matching tables
 //  3. If both are empty, all tables are processed by default
 type MysqlConfig struct {
-	Addr              string   `yaml:"addr" json:"addr" mapstructure:"addr" env:"SOURCE_MYSQL_ADDR" envDefault:"127.0.0.1:3306"`
-	User              string   `yaml:"user" json:"user" mapstructure:"user" env:"SOURCE_MYSQL_USER" envDefault:"root"`
-	Password          string   `yaml:"password" json:"password" mapstructure:"password" env:"SOURCE_MYSQL_PASSWORD" envDefault:""`
-	ExcludeTableRegex []string `yaml:"exclude_table_regex" json:"exclude_table_regex" mapstructure:"exclude_table_regex" env:"SOURCE_MYSQL_EXCLUDE_TABLE_REGEX"`
-	IncludeTableRegex []string `yaml:"include_table_regex" json:"include_table_regex" mapstructure:"include_table_regex" env:"SOURCE_MYSQL_INCLUDE_TABLE_REGEX"`
+	Addr              string   `json:"addr,default=127.0.0.1:3306"`
+	User              string   `json:"user,default=root"`
+	Password          string   `json:"password"`
+	ExcludeTableRegex []string `json:"exclude_table_regex"`
+	IncludeTableRegex []string `json:"include_table_regex"`
 }
 
 // MySQLSource MySQL datasource specific implementation

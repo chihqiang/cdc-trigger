@@ -8,26 +8,25 @@ import (
 	"github.com/apache/rocketmq-client-go/v2"
 	"github.com/apache/rocketmq-client-go/v2/primitive"
 	"github.com/apache/rocketmq-client-go/v2/producer"
-	"github.com/chihqiang/cdc-trigger/pkg/structx"
 	"github.com/chihqiang/cdc-trigger/types"
 )
 
 // RocketMQConfig RocketMQ configuration entity
 type RocketMQConfig struct {
 	// Servers - RocketMQ NameServer address list, e.g., ["127.0.0.1:9876"]
-	Servers []string `yaml:"servers" json:"servers" mapstructure:"servers" env:"OUTPUT_ROCKETMQ_SERVERS" envDefault:"127.0.0.1:9876"`
+	Servers []string `json:"servers,default=127.0.0.1:9876"`
 	// Topic - The topic name to send the message
-	Topic string `yaml:"topic" json:"topic" mapstructure:"topic" env:"OUTPUT_ROCKETMQ_TOPIC" envDefault:"cdc-trigger-events"`
+	Topic string `json:"topic,default=cdc-trigger-events"`
 	// Group - The producer group name
-	Group string `yaml:"group" json:"group" mapstructure:"group" env:"OUTPUT_ROCKETMQ_GROUP"`
+	Group string `json:"group"`
 	// Retry - The number of retries if sending a message fails
-	Retry int `yaml:"retry" json:"retry" mapstructure:"retry" env:"OUTPUT_ROCKETMQ_RETRY" envDefault:"3"`
+	Retry int `json:"retry,default=3"`
 	// Namespace - The namespace
-	Namespace string `yaml:"namespace" json:"namespace" mapstructure:"namespace" env:"OUTPUT_ROCKETMQ_NAMESPACE"`
+	Namespace string `json:"namespace"`
 	// AccessKey - Access key
-	AccessKey string `yaml:"access_key" json:"access_key" mapstructure:"access_key" env:"OUTPUT_ROCKETMQ_ACCESS_KEY"`
+	AccessKey string `json:"access_key"`
 	// SecretKey - Secret key
-	SecretKey string `yaml:"secret_key" json:"secret_key" mapstructure:"secret_key" env:"OUTPUT_ROCKETMQ_SECRET_KEY"`
+	SecretKey string `json:"secret_key"`
 }
 
 // RocketMQOutput RocketMQ implementation that satisfies the IOutput interface
@@ -36,15 +35,8 @@ type RocketMQOutput struct {
 	producer rocketmq.Producer
 }
 
-// NewRocketMQOutput Creates a RocketMQOutput and fills in default values
+// NewRocketMQOutput Creates a RocketMQOutput from the given configuration
 func NewRocketMQOutput(cfg RocketMQConfig) (*RocketMQOutput, error) {
-	var (
-		err error
-	)
-	cfg, err = structx.MergeWithDefaults[RocketMQConfig](cfg)
-	if err != nil {
-		return nil, err
-	}
 	// Create producer options
 	options := []producer.Option{
 		producer.WithNsResolver(primitive.NewPassthroughResolver(cfg.Servers)),

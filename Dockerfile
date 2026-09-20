@@ -35,34 +35,23 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     rm -rf /var/lib/apt/lists/* /var/cache/apt/*
 
 
-# ==========================
-# Store Configuration
-# ==========================
-ENV STORE_TYPE=file
-
-# ==========================
-# Source Configuration
-# ==========================
-ENV SOURCE_TYPE=mysql
-ENV SOURCE_MYSQL_ADDR=127.0.0.1:3306
-ENV SOURCE_MYSQL_USER=root
-ENV SOURCE_MYSQL_INCLUDE_TABLE_REGEX=""
-ENV SOURCE_MYSQL_EXCLUDE_TABLE_REGEX="mysql.*,information_schema.*,performance_schema.*,sys.*"
-
-# ==========================
-# Output Configuration
-# ==========================
-ENV OUTPUT_TYPE=stdout
-
+# No configuration is baked in as environment variables: /app/config.yml carries
+# the defaults with ${VAR:-fallback}, and a variable set with `docker run -e ...`
+# still overrides them.
 
 # Create a non-root user for security
 RUN useradd --system --no-create-home --shell /usr/sbin/nologin cdctrigger
 
-# Copy the built binary from builder stage
+# Copy the built binary and the configuration file from builder stage
 COPY --from=builder /app/cdc-trigger /usr/local/bin/cdc-trigger
+COPY --from=builder /app/config.yml /app/config.yml
+
+# Directory the file store writes its offsets into (the default is the relative
+# "runtime", i.e. /app/runtime with the WORKDIR below)
+RUN mkdir -p /app/runtime
 
 # Set ownership to the non-root user
-RUN chown cdctrigger:cdctrigger /usr/local/bin/cdc-trigger
+RUN chown -R cdctrigger:cdctrigger /usr/local/bin/cdc-trigger /app
 
 # Switch to non-root user
 USER cdctrigger
@@ -71,4 +60,4 @@ USER cdctrigger
 WORKDIR /app
 
 # Default command to run the binary
-CMD ["cdc-trigger","-c","/app/config.yaml"]
+CMD ["cdc-trigger","-c","/app/config.yml"]

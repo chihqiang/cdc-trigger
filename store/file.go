@@ -9,7 +9,7 @@ import (
 )
 
 type FileConfig struct {
-	Dir string `yaml:"dir" json:"dir" mapstructure:"dir" env:"STORE_FILE_DIR"`
+	Dir string `json:"dir"`
 }
 
 // FileStore File-based cache implementation, each key corresponds to a file

@@ -19,14 +19,15 @@ spec:
     spec:
       containers:
         - env:
+            # Consumed by the ${VAR} references in /app/config.yml. A value that
+            # should be a list (e.g. source.mysql.exclude_table_regex) has to be
+            # written in the configuration file, it cannot come from here.
             - name: SOURCE_MYSQL_ADDR
               value: '127.0.0.1:3306'
             - name: SOURCE_MYSQL_USER
               value: root
             - name: SOURCE_MYSQL_PASSWORD
-              value: 123456
-            - name: SOURCE_MYSQL_EXCLUDE_TABLE_REGEX
-              value: "mysql.*,information_schema.*,performance_schema.*,sys.*"
+              value: '123456'
           image: zhiqiangwang/app:cdc-trigger
           imagePullPolicy: Always
           name: cdc-trigger

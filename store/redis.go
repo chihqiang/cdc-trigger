@@ -5,14 +5,13 @@ import (
 	"fmt"
 
 	"github.com/chihqiang/cdc-trigger/pkg/redisx"
-	"github.com/chihqiang/cdc-trigger/pkg/structx"
 	"github.com/redis/go-redis/v9"
 )
 
 type RedisConfig struct {
-	Addr     string `yaml:"addr" json:"addr" mapstructure:"addr" env:"STORE_REDIS_ADDR" envDefault:"127.0.0.1:6379"`
-	Password string `yaml:"password" json:"password" mapstructure:"password" env:"STORE_REDIS_PASSWORD" envDefault:""`
-	DB       int    `yaml:"db" json:"db" mapstructure:"db" env:"STORE_REDIS_DB" envDefault:"0"`
+	Addr     string `json:"addr,default=127.0.0.1:6379"`
+	Password string `json:"password"`
+	DB       int    `json:"db"`
 }
 
 // RedisStore Redis store implementation
@@ -23,12 +22,6 @@ type RedisStore struct {
 
 // NewRedisStore Creates a new RedisStore
 func NewRedisStore(cfg RedisConfig) (*RedisStore, error) {
-	var err error
-	// Merges the configuration with default values
-	cfg, err = structx.MergeWithDefaults[RedisConfig](cfg)
-	if err != nil {
-		return nil, err
-	}
 	// Initializes the Redis client
 	rdb, err := redisx.Open(redisx.Config{
 		Addr:     cfg.Addr,

@@ -1,0 +1,5 @@
+{
+    "gopls": {
+        "analyses": { "SA5008": false }
+    }
+}

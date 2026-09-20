@@ -38,9 +38,9 @@ func Register(storeType StoreType, fn func(Config) (IStore, error)) {
 // Used to configure the storage type and related configurations (e.g., file or Redis)
 type Config struct {
 	// Type Storage type, e.g., "file"
-	Type  StoreType   `yaml:"type" json:"type" mapstructure:"type" env:"STORE_TYPE,required"`
-	File  FileConfig  `yaml:"file" json:"file" mapstructure:"file"`
-	Redis RedisConfig `yaml:"redis" json:"redis" mapstructure:"redis"`
+	Type  StoreType   `json:"type,required"`
+	File  FileConfig  `json:"file"`
+	Redis RedisConfig `json:"redis"`
 }
 
 // IStore Interface for storage operations
