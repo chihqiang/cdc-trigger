@@ -45,12 +45,12 @@ func Register(outputType OutputType, fn func(Config) (IOutput, error)) {
 }
 
 type Config struct {
-	Type     OutputType     `yaml:"type" json:"type" mapstructure:"type" env:"OUTPUT_TYPE,required"`
-	Redis    RedisConfig    `yaml:"redis" json:"redis" mapstructure:"redis"`
-	Kafka    KafkaConfig    `yaml:"kafka" json:"kafka" mapstructure:"kafka"`
-	RabbitMQ RabbitMQConfig `yaml:"rabbitmq" json:"rabbitmq" mapstructure:"rabbitmq"`
-	RocketMQ RocketMQConfig `yaml:"rocketmq" json:"rocketmq" mapstructure:"rocketmq"`
-	Pulsar   PulsarConfig   `yaml:"pulsar" json:"pulsar" mapstructure:"pulsar"`
+	Type     OutputType     `json:"type,required"`
+	Redis    RedisConfig    `json:"redis"`
+	Kafka    KafkaConfig    `json:"kafka"`
+	RabbitMQ RabbitMQConfig `json:"rabbitmq"`
+	RocketMQ RocketMQConfig `json:"rocketmq"`
+	Pulsar   PulsarConfig   `json:"pulsar"`
 }
 
 // IOutput Defines the event output interface

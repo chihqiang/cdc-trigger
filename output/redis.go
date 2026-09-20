@@ -6,17 +6,16 @@ import (
 	"fmt"
 
 	"github.com/chihqiang/cdc-trigger/pkg/redisx"
-	"github.com/chihqiang/cdc-trigger/pkg/structx"
 	"github.com/chihqiang/cdc-trigger/types"
 	"github.com/redis/go-redis/v9"
 )
 
 // RedisConfig Redis configuration entity
 type RedisConfig struct {
-	Addr     string `yaml:"addr" json:"addr" mapstructure:"addr" env:"OUTPUT_REDIS_ADDR" envDefault:"127.0.0.1:6379"`
-	Password string `yaml:"password" json:"password" mapstructure:"password" env:"OUTPUT_REDIS_PASSWORD" envDefault:""`
-	DB       int    `yaml:"db" json:"db" mapstructure:"db" env:"OUTPUT_REDIS_DB" envDefault:"0"`
-	Key      string `yaml:"key" json:"key" mapstructure:"key" env:"OUTPUT_REDIS_KEY" envDefault:"cdc-trigger-events"`
+	Addr     string `json:"addr,default=127.0.0.1:6379"`
+	Password string `json:"password"`
+	DB       int    `json:"db"`
+	Key      string `json:"key,default=cdc-trigger-events"`
 }
 
 type RedisOutput struct {
@@ -25,13 +24,8 @@ type RedisOutput struct {
 	key string
 }
 
-// NewRedisOutput Creates a RedisOutput and fills in default values
+// NewRedisOutput Creates a RedisOutput from the given configuration
 func NewRedisOutput(cfg RedisConfig) (*RedisOutput, error) {
-	var err error
-	cfg, err = structx.MergeWithDefaults[RedisConfig](cfg)
-	if err != nil {
-		return nil, err
-	}
 	// Initialize the Redis client
 	rdb, err := redisx.Open(redisx.Config{
 		Addr:     cfg.Addr,

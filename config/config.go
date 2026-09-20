@@ -2,48 +2,44 @@ package config
 
 import (
 	"fmt"
-	"os"
 
-	"github.com/caarlos0/env/v11"
 	"github.com/chihqiang/cdc-trigger/output"
 	"github.com/chihqiang/cdc-trigger/source"
 	"github.com/chihqiang/cdc-trigger/store"
-	"github.com/joho/godotenv"
-	"gopkg.in/yaml.v3"
+	"github.com/chihqiang/readin"
 )
-
-func init() {
-	_ = godotenv.Load()
-}
 
 // Config defines the global configuration structure
 // It is used to load all configuration items for the application from the configuration file
 type Config struct {
-	Store  store.Config  `yaml:"store" json:"store" mapstructure:"store"`
-	Source source.Config `yaml:"source" json:"source" mapstructure:"source"`
-	Output output.Config `yaml:"output" json:"output" mapstructure:"output"`
+	Store  store.Config  `json:"store"`
+	Source source.Config `json:"source"`
+	Output output.Config `json:"output"`
 }
 
-// Load attempts to load the configuration.
-// Load order: prioritizes reading from the file → if the file does not exist or fails to parse, it loads from environment variables.
+// Load reads the configuration file at path and fills a Config with it.
+//
+// The file is the only source of configuration: there is no longer an
+// environment variable fallback for the struct itself. Environment variables are
+// referenced from inside the file instead, with ${VAR} or ${VAR:-fallback}:
+//
+//	source:
+//	  mysql:
+//	    password: "${SOURCE_MYSQL_PASSWORD}"
+//	    addr: "${SOURCE_MYSQL_ADDR:-127.0.0.1:3306}"
+//
+// `$$` is an escaped `$`, and an unset variable without a fallback expands to
+// the empty string. Expansion only ever fills a string or a key, so a value that
+// should be a list has to be written as a list in the file.
+//
+// Field defaults come from the `default=` option of the json tag, and a field
+// tagged `required` is an error when the file does not provide it.
 func Load(path string) (*Config, error) {
-	var cfg Config
+	cfg := &Config{}
 
-	// ① Try loading from the configuration file first
-	data, err := os.ReadFile(path)
-	if err == nil {
-		// Attempt to parse the YAML configuration file
-		if yamlErr := yaml.Unmarshal(data, &cfg); yamlErr == nil {
-			return &cfg, nil // File read and parsed successfully
-		}
-		// If YAML parsing fails, continue trying environment variables
+	reader := readin.New(readin.WithEnvExpansion())
+	if err := reader.LoadFile(path, cfg); err != nil {
+		return nil, fmt.Errorf("failed to load configuration from %s: %w", path, err)
 	}
-
-	// ② If file loading fails, try loading from environment variables
-	if envErr := env.Parse(&cfg); envErr == nil {
-		return &cfg, nil // Environment variable parsing successful
-	}
-
-	// ③ If both methods fail, return an error message
-	return nil, fmt.Errorf("failed to load configuration (file: %v, env: %v)", err, env.Parse(&cfg))
+	return cfg, nil
 }

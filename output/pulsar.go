@@ -6,16 +6,15 @@ import (
 	"time"
 
 	"github.com/apache/pulsar-client-go/pulsar"
-	"github.com/chihqiang/cdc-trigger/pkg/structx"
 	"github.com/chihqiang/cdc-trigger/types"
 )
 
 type PulsarConfig struct {
-	URL               string `yaml:"url" json:"url" mapstructure:"url" env:"OUTPUT_PULSAR_URL" envDefault:"pulsar://localhost:6650"`
-	Topic             string `yaml:"topic" json:"topic" mapstructure:"topic" env:"OUTPUT_PULSAR_TOPIC" envDefault:"cdc-trigger-events"`
-	Token             string `yaml:"token" json:"token" mapstructure:"token" env:"OUTPUT_PULSAR_TOKEN"`
-	OperationTimeout  int    `yaml:"operation_timeout" json:"operation_timeout" mapstructure:"operation_timeout" env:"OUTPUT_PULSAR_OPERATION_TIMEOUT" envDefault:"30"`
-	ConnectionTimeout int    `yaml:"connection_timeout" json:"connection_timeout" mapstructure:"connection_timeout" env:"OUTPUT_PULSAR_CONNECTION_TIMEOUT" envDefault:"30"`
+	URL               string `json:"url,default=pulsar://localhost:6650"`
+	Topic             string `json:"topic,default=cdc-trigger-events"`
+	Token             string `json:"token"`
+	OperationTimeout  int    `json:"operation_timeout,default=30"`
+	ConnectionTimeout int    `json:"connection_timeout,default=30"`
 }
 
 type PulsarOutput struct {
@@ -26,12 +25,6 @@ type PulsarOutput struct {
 
 // NewPulsarOutput initializes the Pulsar client and producer
 func NewPulsarOutput(cfg PulsarConfig) (*PulsarOutput, error) {
-	var err error
-	cfg, err = structx.MergeWithDefaults[PulsarConfig](cfg)
-	if err != nil {
-		return nil, err
-	}
-
 	o := &PulsarOutput{cfg: cfg}
 
 	clientOptions := pulsar.ClientOptions{
